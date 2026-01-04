@@ -38,13 +38,14 @@ class ATC2DEnv(gym.Env):
         #  dep0, dep0_y,
         #  dep1, dep1_y,
         #  arrival_active, arrival_lane, arrival_y]
-        low = np.zeros(8, dtype=np.float32)
+        low = np.zeros(9, dtype=np.float32)
         high = np.array(
             [
-                queue_length,
+                queue_length,          # blue queue
                 1, lane_height,
                 1, lane_height,
                 1, self.num_lanes - 1, lane_height,
+                queue_length           # landed red planes
             ],
             dtype=np.float32,
         )
@@ -61,6 +62,7 @@ class ATC2DEnv(gym.Env):
         super().reset(seed=seed)
 
         self.planes_in_queue = self.queue_length
+        self.arrivals_landed = 0
 
         # Departures
         self.dep_occupied = [False] * self.num_lanes
@@ -86,9 +88,11 @@ class ATC2DEnv(gym.Env):
                 int(self.arrival_active),
                 self.arrival_lane if self.arrival_active else 0,
                 self.arrival_y if self.arrival_active else 0,
+                self.arrivals_landed,
             ],
             dtype=np.float32,
         )
+
 
     def step(self, action):
         self.steps += 1
@@ -122,6 +126,7 @@ class ATC2DEnv(gym.Env):
 
             if self.arrival_y <= 0:
                 self.arrival_active = False
+                self.arrivals_landed += 1
                 reward += 5.0  # successful landing
 
         # -------- Departure movement (up) --------
@@ -167,6 +172,10 @@ class ATC2DEnv(gym.Env):
         top_margin = 60
         runway_width = 50
         runway_gap = 40
+        top_queue_slot = 28
+        top_queue_margin = 5
+        top_queue_y = 20
+
 
         if self.window is None:
             pygame.init()
@@ -188,6 +197,28 @@ class ATC2DEnv(gym.Env):
             color = (70, 150, 255) if filled else (60, 65, 80)
             pygame.draw.rect(surf, color, (x, y_slot, queue_slot, queue_slot))
             pygame.draw.rect(surf, (40, 45, 55), (x, y_slot, queue_slot, queue_slot), 1)
+
+        # ---- Arrival queue (top) ----
+        max_slots = self.queue_length
+        start_x_top = (
+            width - (max_slots * top_queue_slot + (max_slots - 1) * top_queue_margin)
+        ) // 2
+
+        for i in range(max_slots):
+            x = start_x_top + i * (top_queue_slot + top_queue_margin)
+            filled = i < self.arrivals_landed
+            color = (220, 70, 70) if filled else (80, 50, 50)
+            pygame.draw.rect(
+                surf,
+                color,
+                (x, top_queue_y, top_queue_slot, top_queue_slot),
+            )
+            pygame.draw.rect(
+                surf,
+                (120, 90, 90),
+                (x, top_queue_y, top_queue_slot, top_queue_slot),
+                1,
+            )
 
         # ---- Runways ----
         total_width = self.num_lanes * runway_width + (self.num_lanes - 1) * runway_gap
