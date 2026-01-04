@@ -7,7 +7,7 @@ env = ATC2DEnv(render_mode="human")
 
 # 2. Încărcăm modelul antrenat
 # Asigură-te că fișierul ppo_atc.zip este în același folder
-model = PPO.load("ppo_atc")
+model = PPO.load("models/ppo_atc")
 
 # 3. Rulăm câteva episoade de test
 episodes = 5
