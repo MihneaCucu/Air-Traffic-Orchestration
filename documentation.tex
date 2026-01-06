@@ -1,0 +1,466 @@
+\documentclass[12pt,a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{hyperref}  % Moved to last
+
+% Code listing style
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray}
+}
+
+% Title
+\title{Air Traffic Control Orchestration using Reinforcement Learning}
+\author{Names \\ University of Bucharest}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+\label{sec:introduction}
+
+\subsection{Motivation and Idea}
+\label{subsec:motivation}
+
+% TODO: Expand with real-world motivation
+Air traffic control is a critical domain requiring efficient decision-making under uncertainty. The complexity of managing multiple aircraft, coordinating takeoffs and landings, and handling unexpected arrivals makes it an ideal testbed for reinforcement learning algorithms.
+
+Reinforcement learning offers several advantages for this problem:
+\begin{itemize}
+    \item Ability to learn complex policies without explicit programming
+    \item Adaptability to dynamic and unpredictable situations
+    \item Optimization of long-term objectives (safety, efficiency, throughput)
+    \item Potential to discover novel strategies not apparent to human operators
+\end{itemize}
+
+% TODO: Add motivation for choosing specific algorithms
+We chose to implement and compare multiple RL approaches (value-based DQN and policy-based PPO) to understand their relative strengths in this sequential decision-making problem.
+
+\subsection{Problem Statement}
+% TODO: Expand problem formulation
+The goal of this project is to develop RL agents capable of orchestrating aircraft movements on a simulated airport with two runways, managing a queue of departing aircraft while prioritizing incoming emergency arrivals. The agent must learn to:
+\begin{itemize}
+    \item Maximize throughput (number of aircraft processed)
+    \item Minimize waiting times
+    \item Handle unexpected arrival events that block runways
+    \item Balance departure scheduling across two runways
+\end{itemize}
+
+\subsection{Contributions}
+The main contributions of this work are:
+\begin{itemize}
+    \item A custom 2D air traffic control environment implemented using the Gymnasium framework
+    \item A from-scratch implementation of the Deep Q-Network (DQN) algorithm using PyTorch
+    \item Comprehensive experimental comparison of multiple RL algorithms (PPO, DQN, % TODO: Add other agents implemented by teammates)
+    \item Analysis of convergence behavior, stability, and hyperparameter sensitivity
+    \item Documentation of challenges encountered and solutions applied
+\end{itemize}
+
+\section{Related Work}
+\label{sec:related}
+
+% TODO: Add references to relevant papers
+Reinforcement learning has been successfully applied to various air traffic control scenarios. Deep Q-Networks, introduced by Mnih et al., have shown remarkable success in learning complex decision-making policies. Policy gradient methods like PPO have demonstrated superior sample efficiency in many domains.
+
+% TODO: Discuss 2-3 relevant papers about:
+% - RL in air traffic control
+% - DQN and its variants
+% - Comparison of value-based vs policy-based methods
+
+\section{Environment Design}
+\label{sec:environment}
+
+% This section describes the custom ATC environment (atc_env.py)
+% TODO: Add diagrams or screenshots of the environment visualization
+
+\subsection{Environment Overview}
+\label{subsec:env-overview}
+
+The air traffic control environment consists of:
+\begin{itemize}
+    \item A queue of 12 departing aircraft (blue)
+    \item Two parallel runways for departures
+    \item Random arrival events (25\% probability) that block runways temporarily
+    \item A landing queue tracking successfully landed arrivals (red)
+    \item Maximum episode length of 500 steps
+\end{itemize}
+
+\subsection{State Space}
+\label{subsec:state-space}
+
+The observation is a 9-dimensional continuous vector:
+\begin{equation}
+s = [q, d_0, y_0, d_1, y_1, a_{active}, a_{lane}, a_y, l]
+\end{equation}
+where:
+\begin{itemize}
+    \item $q \in [0, 12]$: number of planes in departure queue
+    \item $d_i \in \{0, 1\}$: binary indicator if runway $i$ is occupied
+    \item $y_i \in [0, 10]$: vertical position of departing aircraft on runway $i$
+    \item $a_{active} \in \{0, 1\}$: binary indicator if an arrival is present
+    \item $a_{lane} \in \{0, 1\}$: which runway the arrival is using
+    \item $a_y \in [0, 10]$: vertical position of arriving aircraft
+    \item $l \in [0, 12]$: number of successfully landed arrivals
+\end{itemize}
+
+\subsection{Action Space}
+\label{subsec:action-space}
+
+The agent can choose from 3 discrete actions:
+\begin{itemize}
+    \item Action 0: Wait (do nothing)
+    \item Action 1: Release aircraft to runway 0
+    \item Action 2: Release aircraft to runway 1
+\end{itemize}
+
+\subsection{Reward Structure}
+\label{subsec:reward-structure}
+
+The reward function is designed to encourage efficient throughput while penalizing delays:
+\begin{itemize}
+    \item $r = -0.1$ per timestep (time penalty, encourages efficiency)
+    \item $r = -1.0$ when an arrival blocks a takeoff attempt (coordination penalty)
+    \item $r = -0.2$ per timestep while arrival is active (pressure to clear runway)
+    \item $r = +5.0$ for successful arrival landing
+    \item $r = +10.0$ for successful departure
+    \item $r = +50.0$ for completing all aircraft (terminal reward)
+\end{itemize}
+
+The reward structure creates a trade-off between:
+\begin{enumerate}
+    \item \textbf{Throughput}: Maximizing the number of aircraft processed
+    \item \textbf{Safety}: Avoiding conflicts when arrivals block runways
+    \item \textbf{Efficiency}: Minimizing total time to clear all aircraft
+\end{enumerate}
+
+\section{Agent Architectures}
+\label{sec:architecture}
+
+% This section describes all RL agents implemented by the team
+% Each team member should add a subsection for their agent
+
+We implement and compare multiple reinforcement learning agents with different algorithmic approaches. This section describes the architecture of each agent.
+
+% TODO (Other team members): Add subsections for additional agents:
+% - A2C/A3C
+% - SAC
+% - Random baseline
+% - etc.
+
+\subsection{Custom Deep Q-Network (DQN) Implementation}
+\label{subsec:custom-dqn}
+
+Our custom DQN implementation follows the original architecture with the following components:
+
+\subsubsection{Neural Network Architecture}
+The Q-network consists of a fully connected neural network with the following structure:
+\begin{itemize}
+    \item Input layer: 9 neurons (state dimension)
+    \item Hidden layer 1: 64 neurons with ReLU activation
+    \item Hidden layer 2: 64 neurons with ReLU activation
+    \item Output layer: 3 neurons (action values for each action)
+\end{itemize}
+
+The network approximates the action-value function $Q(s, a; \theta)$, where $\theta$ represents the network parameters.
+
+\subsubsection{Key Algorithm Components}
+
+\textbf{Experience Replay Buffer:} We maintain a replay buffer of capacity 50,000 transitions. Each transition consists of $(s_t, a_t, r_t, s_{t+1}, done_t)$. During training, we sample random minibatches of size 64 to break correlation between consecutive samples.
+
+\textbf{Target Network:} A separate target network $Q(s, a; \theta^-)$ is used to stabilize training. The target network parameters $\theta^-$ are updated every 1,000 steps by copying from the online network: $\theta^- \leftarrow \theta$.
+
+\textbf{Loss Function:} The temporal difference (TD) error is minimized using Mean Squared Error:
+\begin{equation}
+\mathcal{L}(\theta) = \mathbb{E}_{(s,a,r,s') \sim \mathcal{D}} \left[ \left( r + \gamma \max_{a'} Q(s', a'; \theta^-) - Q(s, a; \theta) \right)^2 \right]
+\end{equation}
+where $\mathcal{D}$ is the replay buffer, and $\gamma = 0.99$ is the discount factor.
+
+\textbf{Exploration Strategy:} We use $\epsilon$-greedy exploration with exponential decay:
+\begin{equation}
+\epsilon_t = \max(\epsilon_{end}, \epsilon_{start} \cdot \delta^{t})
+\end{equation}
+with $\epsilon_{start} = 1.0$, $\epsilon_{end} = 0.01$, and $\delta = 0.995$ per episode.
+
+\subsubsection{Implementation Details}
+
+% TODO: Add code snippet from your custom_dqn_agent.py
+\begin{lstlisting}[caption={Core DQN Update Step}, label={lst:dqn-update}]
+# From custom_dqn_agent.py - Update method
+def update(self):
+    state, action, reward, next_state, done = \
+        self.replay_buffer.sample(self.batch_size)
+    
+    # Compute current Q-values
+    q_values = self.q_net(state).gather(1, action)
+    
+    # Compute target Q-values
+    with torch.no_grad():
+        next_q = self.target_net(next_state).max(1)[0]
+        target_q = reward + (1 - done) * self.gamma * next_q
+    
+    # Optimize
+    loss = nn.MSELoss()(q_values, target_q)
+    self.optimizer.zero_grad()
+    loss.backward()
+    self.optimizer.step()
+\end{lstlisting}
+
+\textbf{Hyperparameters:}
+\begin{table}[H]
+\centering
+\caption{Custom DQN Hyperparameters}
+\label{tab:hyperparams}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Parameter} & \textbf{Value} \\
+\hline
+Learning Rate & $1 \times 10^{-3}$ \\
+Discount Factor ($\gamma$) & 0.99 \\
+Batch Size & 64 \\
+Replay Buffer Size & 50,000 \\
+Target Update Frequency & 1,000 steps \\
+Initial Epsilon & 1.0 \\
+Final Epsilon & 0.01 \\
+Epsilon Decay & 0.995 \\
+Optimizer & Adam \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{PPO - Proximal Policy Optimization}
+\label{subsec:ppo}
+
+% TODO (Team member 2): Expand this section with PPO details
+% - Actor-critic architecture
+% - Policy clipping mechanism
+% - Advantage estimation
+% - Hyperparameters used
+
+We use Proximal Policy Optimization (PPO) from Stable Baselines3 as a strong policy-based baseline. PPO is an on-policy algorithm that uses an actor-critic architecture with a clipped surrogate objective to prevent large policy updates.
+
+% TODO: Add mathematical formulation of PPO objective
+% TODO: Add hyperparameters table
+% TODO: Explain why PPO was chosen (stability, sample efficiency)
+
+\subsection{DQN (Stable Baselines3) - Baseline}
+\label{subsec:dqn-baseline}
+
+The library implementation of DQN from Stable Baselines3 serves as a correctness baseline to validate our custom implementation. It uses the same algorithmic principles as our Custom DQN but with additional optimizations.
+
+% TODO (Other team members): Add subsections for additional agents implemented
+
+\section{Experimental Results and Discussion}
+\label{sec:results}
+
+% This section presents results for ALL agents implemented by the team
+% Each team member should add their agent's results
+
+\subsection{Training Configuration}
+\label{subsec:training-config}
+
+All agents were trained under identical conditions for fair comparison:
+\begin{itemize}
+    \item Training timesteps: 1,000,000 (unless otherwise specified)
+    \item Environment: ATC2DEnv with default parameters
+    \item Random seed: Not fixed % TODO: Add seed if fixed
+    \item Hardware: Standard configuration % TODO: Specify CPU/GPU configuration
+    \item Framework: Stable Baselines3 (for PPO, DQN baseline) and PyTorch (for Custom DQN)
+\end{itemize}
+
+% TODO: Add training time comparison if relevant
+
+% TODO: If you train with different timesteps, add this subsection:
+% \subsection{Convergence Analysis with Different Training Durations}
+% We compare training runs with 50,000, 500,000, and 1,000,000 timesteps to analyze convergence behavior.
+
+\subsection{Learning Curves}
+
+Figure \ref{fig:learning-curves} shows the episodic mean reward during training for all three agents.
+
+\begin{figure}[H]
+    \centering
+    % TODO: Add screenshot from TensorBoard showing the learning curves
+    % Export the "rollout/ep_rew_mean" plot with all agents visible
+    \includegraphics[width=0.9\textwidth]{experimental_results/learning_curves.png}
+    \caption{Learning curves comparing episodic mean reward across training. The plot shows Custom DQN (orange), DQN Library (blue), and PPO (green).}
+    % TODO: Describe the trend - does your agent converge? How does it compare?
+    \label{fig:learning-curves}
+\end{figure}
+
+\textbf{Observations:}
+\begin{itemize}
+    \item Custom DQN shows learning progress throughout training.
+    % TODO: Describe what you observe. Example: "Custom DQN achieves stable performance after approximately 300k timesteps"
+    \item Library DQN exhibits similar convergence patterns.
+    % TODO: "The library DQN converges slightly faster, likely due to optimized hyperparameters"
+    \item PPO demonstrates policy-based learning characteristics.
+    % TODO: "PPO shows the highest final performance due to its policy gradient approach"
+\end{itemize}
+
+\subsection{Loss Convergence}
+
+Figure \ref{fig:loss} illustrates the TD loss during training for the DQN agents.
+
+\begin{figure}[H]
+    \centering
+    % TODO: Add screenshot from TensorBoard showing "train/loss" for Custom DQN
+    \includegraphics[width=1\textwidth]{experimental_results/loss.png}
+    \caption{Training loss for Custom DQN implementation showing convergence of the Q-function approximation.}
+    % TODO: Describe the loss behavior
+    \label{fig:loss}
+\end{figure}
+
+\subsection{Exploration Decay}
+
+Figure \ref{fig:epsilon} shows the epsilon decay schedule during training.
+
+\begin{figure}[H]
+    \centering
+    % TODO: Add screenshot from TensorBoard showing "train/epsilon"
+    \includegraphics[width=1\textwidth]{experimental_results/epsilon.png}
+    \caption{Epsilon-greedy exploration parameter decay over training steps, showing the transition from exploration to exploitation.}
+    \label{fig:epsilon}
+\end{figure}
+
+\subsection{Final Performance Comparison}
+
+After training, we evaluated each agent for 50 episodes to compute the mean final reward. Table \ref{tab:final-results} and Figure \ref{fig:comparison} summarize the results.
+
+\begin{table}[H]
+\centering
+\caption{Final Performance Comparison (Mean $\pm$ Std over 50 episodes)}
+\label{tab:final-results}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Agent} & \textbf{Mean Reward} \\
+\hline
+PPO (SB3) & TBD \\ % TODO: Add value from compare_agents.py output
+DQN (Library) & TBD \\ % TODO: Add value
+Custom DQN (Mine) & TBD \\ % TODO: Add value
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{experimental_results/rezultate_comparative.png}
+    \caption{Bar chart comparing final mean reward across agents.}
+    % TODO: Describe what this shows about your implementation
+    \label{fig:comparison}
+\end{figure}
+
+\subsection{Discussion}
+\label{subsec:discussion}
+
+\subsubsection{Implementation Correctness}
+% TODO: Analyze how close Custom DQN is to library baseline
+% Example: "Our custom DQN achieves X\% of the library baseline performance..."
+
+\subsubsection{Algorithm Comparison}
+% TODO: Compare value-based (DQN) vs policy-based (PPO) approaches
+% - Sample efficiency
+% - Final performance
+% - Stability during training
+% - Computational requirements
+
+\subsubsection{Convergence and Stability}
+% TODO: Discuss:
+% - At what point does each agent converge?
+% - Variance in episodic rewards
+% - Any training instabilities or divergence
+
+\subsubsection{Hyperparameter Sensitivity}
+% TODO: If you tested different hyperparameters, discuss:
+% - Impact of learning rate
+% - Effect of training duration (50k vs 500k vs 1M timesteps)
+% - Replay buffer size impact
+% - Exploration-exploitation trade-off (epsilon decay)
+
+% TODO (All team members): Add analysis specific to your agents
+
+\section{Challenges and Solutions}
+\label{sec:challenges}
+
+% This section documents problems encountered during implementation and how they were solved
+% Each team member should document their specific challenges
+
+\subsection{Implementation Challenges}
+\label{subsec:impl-challenges}
+
+\subsubsection{DQN Training Instability}
+% TODO: Describe challenges with DQN training
+% Examples:
+% - Initial version had diverging Q-values
+% - Solution: Added target network with proper update frequency
+% - Issue: Overestimation of Q-values
+% - Solution: Implemented experience replay with sufficient buffer size
+
+\subsubsection{Environment Design Issues}
+% TODO: Document environment-related problems
+% Examples:
+% - Initial reward structure led to suboptimal behavior (agent preferred to wait)
+% - Solution: Adjusted time penalty and landing rewards
+% - Problem: State representation was ambiguous
+% - Solution: Added explicit indicators for runway occupancy
+
+\subsection{Technical Challenges}
+% TODO (All team members): Add technical issues encountered
+% Examples:
+% - Memory issues with large replay buffers
+% - GPU compatibility problems
+% - TensorBoard logging issues
+% - Hyperparameter tuning difficulties
+
+\subsection{Lessons Learned}
+% TODO: Reflect on what you learned from solving these challenges
+
+\section{Conclusions}
+\label{sec:conclusions}
+
+% TODO: Summarize the entire team's work
+In this work, we successfully implemented and compared multiple reinforcement learning algorithms for air traffic control orchestration. We developed a custom DQN implementation from scratch, demonstrating the effectiveness of RL approaches for this domain.
+% TODO (other members): add your contributions
+
+% TODO: Add quantitative summary of best results achieved
+
+\subsection{Future Work}
+
+Potential improvements and extensions include:
+\begin{itemize}
+    \item \textbf{Advanced DQN variants}: Double DQN, Dueling DQN, Rainbow
+    \item \textbf{Network architecture}: Deeper networks, attention mechanisms
+    \item \textbf{Environment complexity}: More runways, weather conditions, fuel constraints
+    \item \textbf{Experience replay}: Prioritized experience replay (PER)
+    \item \textbf{Multi-agent RL}: Coordinating multiple ATC agents
+    \item \textbf{Transfer learning}: Pre-training on simpler scenarios
+    \item \textbf{Real-world deployment}: Testing on realistic ATC simulators
+    % TODO (All team members): Add specific improvements related to your work
+\end{itemize}
+
+% Bibliography section (uncomment and add references when ready)
+% \bibliographystyle{plain}
+% \bibliography{references}
+
+\end{document}
