@@ -1,0 +1,22 @@
+{
+  "experiment_name": "baseline_seed1",
+  "config": {
+    "name": "baseline",
+    "learning_rate": 0.001,
+    "gamma": 0.99,
+    "batch_size": 64,
+    "buffer_size": 50000,
+    "target_update_freq": 1000,
+    "epsilon_decay": 0.995
+  },
+  "seed": 1,
+  "training_time_seconds": 252.854896,
+  "total_timesteps": 300000,
+  "evaluation": {
+    "mean_reward": 167.71000000000018,
+    "std_reward": 2.4506937793205115,
+    "min_reward": 163.90000000000006,
+    "max_reward": 175.70000000000036
+  },
+  "timestamp": "2026-01-07T18:32:56.560353"
+}

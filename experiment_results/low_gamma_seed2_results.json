@@ -1,0 +1,22 @@
+{
+  "experiment_name": "low_gamma_seed2",
+  "config": {
+    "name": "low_gamma",
+    "learning_rate": 0.001,
+    "gamma": 0.95,
+    "batch_size": 64,
+    "buffer_size": 50000,
+    "target_update_freq": 1000,
+    "epsilon_decay": 0.995
+  },
+  "seed": 2,
+  "training_time_seconds": 248.959925,
+  "total_timesteps": 300000,
+  "evaluation": {
+    "mean_reward": 168.39000000000016,
+    "std_reward": 2.202021798257253,
+    "min_reward": 164.90000000000006,
+    "max_reward": 173.60000000000016
+  },
+  "timestamp": "2026-01-07T19:26:38.906782"
+}

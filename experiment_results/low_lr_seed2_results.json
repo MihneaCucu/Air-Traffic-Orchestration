@@ -1,0 +1,22 @@
+{
+  "experiment_name": "low_lr_seed2",
+  "config": {
+    "name": "low_lr",
+    "learning_rate": 0.0001,
+    "gamma": 0.99,
+    "batch_size": 64,
+    "buffer_size": 50000,
+    "target_update_freq": 1000,
+    "epsilon_decay": 0.995
+  },
+  "seed": 2,
+  "training_time_seconds": 244.504009,
+  "total_timesteps": 300000,
+  "evaluation": {
+    "mean_reward": 167.73000000000016,
+    "std_reward": 1.9842126902124553,
+    "min_reward": 163.90000000000006,
+    "max_reward": 171.70000000000022
+  },
+  "timestamp": "2026-01-07T19:01:51.166457"
+}

@@ -1,0 +1,22 @@
+{
+  "experiment_name": "freq_target_update_seed1",
+  "config": {
+    "name": "freq_target_update",
+    "learning_rate": 0.001,
+    "gamma": 0.99,
+    "batch_size": 64,
+    "buffer_size": 50000,
+    "target_update_freq": 500,
+    "epsilon_decay": 0.995
+  },
+  "seed": 1,
+  "training_time_seconds": 245.508396,
+  "total_timesteps": 300000,
+  "evaluation": {
+    "mean_reward": 168.73000000000016,
+    "std_reward": 2.94501273341904,
+    "min_reward": 164.9000000000001,
+    "max_reward": 175.50000000000028
+  },
+  "timestamp": "2026-01-07T20:00:16.237793"
+}

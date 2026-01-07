@@ -1,0 +1,22 @@
+{
+  "experiment_name": "high_lr_seed1",
+  "config": {
+    "name": "high_lr",
+    "learning_rate": 0.005,
+    "gamma": 0.99,
+    "batch_size": 64,
+    "buffer_size": 50000,
+    "target_update_freq": 1000,
+    "epsilon_decay": 0.995
+  },
+  "seed": 1,
+  "training_time_seconds": 249.62704,
+  "total_timesteps": 300000,
+  "evaluation": {
+    "mean_reward": 161.95000000000027,
+    "std_reward": 2.0850659461993644,
+    "min_reward": 159.00000000000014,
+    "max_reward": 165.0000000000004
+  },
+  "timestamp": "2026-01-07T18:45:28.229660"
+}

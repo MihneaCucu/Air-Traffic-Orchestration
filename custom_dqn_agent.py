@@ -39,7 +39,7 @@ class ReplayBuffer:
 class CustomDQN:
     def __init__(self, env, learning_rate=1e-3, gamma=0.99, batch_size=64, buffer_size=10000, 
                  epsilon_start=1.0, epsilon_end=0.01, epsilon_decay=0.995, 
-                 target_update_freq=1000, log_dir="atc_logs", device=None):
+                 target_update_freq=1000, log_dir="atc_logs", device=None, seed=None):
         self.env = env
         self.learning_rate = learning_rate
         self.gamma = gamma
@@ -49,6 +49,15 @@ class CustomDQN:
         self.epsilon_end = epsilon_end
         self.epsilon_decay = epsilon_decay
         self.target_update_freq = target_update_freq
+        self.seed = seed
+        
+        # Set seeds for reproducibility
+        if seed is not None:
+            torch.manual_seed(seed)
+            np.random.seed(seed)
+            random.seed(seed)
+            if torch.cuda.is_available():
+                torch.cuda.manual_seed(seed)
         
         if device:
              self.device = torch.device(device)
@@ -66,8 +75,9 @@ class CustomDQN:
         self.optimizer = optim.Adam(self.q_net.parameters(), lr=self.learning_rate)
         self.replay_buffer = ReplayBuffer(self.buffer_size)
         
-        current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-        self.writer = SummaryWriter(log_dir=os.path.join(log_dir, f"CustomDQN_{current_time}"))
+        # Don't create writer in __init__ anymore, will be created in learn()
+        self.writer = None
+        self.log_dir = log_dir
         self.steps_done = 0
 
     def select_action(self, state, deterministic=False):
@@ -105,7 +115,16 @@ class CustomDQN:
 
         return loss.item()
 
-    def learn(self, total_timesteps):
+    def learn(self, total_timesteps, log_name=None):
+        # Create writer with custom name if provided
+        if log_name:
+            log_path = os.path.join(self.log_dir, log_name)
+        else:
+            current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+            log_path = os.path.join(self.log_dir, f"CustomDQN_{current_time}")
+        
+        self.writer = SummaryWriter(log_dir=log_path)
+        
         state, _ = self.env.reset()
         episode_reward = 0
         episode_steps = 0
@@ -141,6 +160,10 @@ class CustomDQN:
                 state, _ = self.env.reset()
                 episode_reward = 0
                 episode_steps = 0
+        
+        # Close writer after training
+        if self.writer:
+            self.writer.close()
 
     def save(self, path):
         torch.save(self.q_net.state_dict(), path)

@@ -1,0 +1,22 @@
+{
+  "experiment_name": "slow_epsilon_decay_seed2",
+  "config": {
+    "name": "slow_epsilon_decay",
+    "learning_rate": 0.001,
+    "gamma": 0.99,
+    "batch_size": 64,
+    "buffer_size": 50000,
+    "target_update_freq": 1000,
+    "epsilon_decay": 0.998
+  },
+  "seed": 2,
+  "training_time_seconds": 250.935057,
+  "total_timesteps": 300000,
+  "evaluation": {
+    "mean_reward": 167.62000000000015,
+    "std_reward": 2.289454083400704,
+    "min_reward": 163.90000000000006,
+    "max_reward": 172.70000000000022
+  },
+  "timestamp": "2026-01-07T20:17:01.095696"
+}

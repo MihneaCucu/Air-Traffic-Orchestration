@@ -1,0 +1,22 @@
+{
+  "experiment_name": "high_gamma_seed0",
+  "config": {
+    "name": "high_gamma",
+    "learning_rate": 0.001,
+    "gamma": 0.995,
+    "batch_size": 64,
+    "buffer_size": 50000,
+    "target_update_freq": 1000,
+    "epsilon_decay": 0.995
+  },
+  "seed": 0,
+  "training_time_seconds": 247.83167,
+  "total_timesteps": 300000,
+  "evaluation": {
+    "mean_reward": 162.45000000000027,
+    "std_reward": 2.17887585695016,
+    "min_reward": 160.0000000000001,
+    "max_reward": 169.0000000000005
+  },
+  "timestamp": "2026-01-07T19:05:59.273994"
+}

@@ -18,7 +18,7 @@ def train():
     print("--- Start Antrenare PPO ---")
     model_ppo = PPO("MlpPolicy", env, verbose=1, tensorboard_log=log_dir, device="cpu")
     
-    model_ppo.learn(total_timesteps=1000000, tb_log_name="PPO_LongRun")
+    model_ppo.learn(total_timesteps=500000, tb_log_name="PPO_LongRun")
     
     model_ppo.save(f"{models_dir}/ppo_atc")
     print("PPO salvat cu succes.")
@@ -27,7 +27,7 @@ def train():
     env.reset()
     
     model_dqn = DQN("MlpPolicy", env, verbose=1, tensorboard_log=log_dir)
-    model_dqn.learn(total_timesteps=100000, tb_log_name="DQN_run")
+    model_dqn.learn(total_timesteps=500000, tb_log_name="DQN_run")
     
     model_dqn.save(f"{models_dir}/dqn_atc")
     print("DQN salvat cu succes.")

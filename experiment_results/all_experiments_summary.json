@@ -1,0 +1,596 @@
+[
+  {
+    "experiment_name": "baseline_seed0",
+    "config": {
+      "name": "baseline",
+      "learning_rate": 0.001,
+      "gamma": 0.99,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 0,
+    "training_time_seconds": 251.217274,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 167.80000000000013,
+      "std_reward": 3.0156259715024967,
+      "min_reward": 163.90000000000006,
+      "max_reward": 173.7000000000003
+    },
+    "timestamp": "2026-01-07T18:28:43.539037"
+  },
+  {
+    "experiment_name": "baseline_seed1",
+    "config": {
+      "name": "baseline",
+      "learning_rate": 0.001,
+      "gamma": 0.99,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 1,
+    "training_time_seconds": 252.854896,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 167.71000000000018,
+      "std_reward": 2.4506937793205115,
+      "min_reward": 163.90000000000006,
+      "max_reward": 175.70000000000036
+    },
+    "timestamp": "2026-01-07T18:32:56.560353"
+  },
+  {
+    "experiment_name": "baseline_seed2",
+    "config": {
+      "name": "baseline",
+      "learning_rate": 0.001,
+      "gamma": 0.99,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 2,
+    "training_time_seconds": 252.094373,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 153.24500000000052,
+      "std_reward": 35.61877980784774,
+      "min_reward": 68.00000000000242,
+      "max_reward": 174.30000000000015
+    },
+    "timestamp": "2026-01-07T18:37:08.907659"
+  },
+  {
+    "experiment_name": "high_lr_seed0",
+    "config": {
+      "name": "high_lr",
+      "learning_rate": 0.005,
+      "gamma": 0.99,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 0,
+    "training_time_seconds": 249.15879,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 162.7000000000003,
+      "std_reward": 2.8301943396170697,
+      "min_reward": 158.00000000000014,
+      "max_reward": 169.00000000000045
+    },
+    "timestamp": "2026-01-07T18:41:18.341986"
+  },
+  {
+    "experiment_name": "high_lr_seed1",
+    "config": {
+      "name": "high_lr",
+      "learning_rate": 0.005,
+      "gamma": 0.99,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 1,
+    "training_time_seconds": 249.62704,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 161.95000000000027,
+      "std_reward": 2.0850659461993644,
+      "min_reward": 159.00000000000014,
+      "max_reward": 165.0000000000004
+    },
+    "timestamp": "2026-01-07T18:45:28.229660"
+  },
+  {
+    "experiment_name": "high_lr_seed2",
+    "config": {
+      "name": "high_lr",
+      "learning_rate": 0.005,
+      "gamma": 0.99,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 2,
+    "training_time_seconds": 247.515782,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 169.02000000000015,
+      "std_reward": 3.1031596800680705,
+      "min_reward": 164.90000000000015,
+      "max_reward": 177.9000000000003
+    },
+    "timestamp": "2026-01-07T18:49:35.915003"
+  },
+  {
+    "experiment_name": "low_lr_seed0",
+    "config": {
+      "name": "low_lr",
+      "learning_rate": 0.0001,
+      "gamma": 0.99,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 0,
+    "training_time_seconds": 247.372873,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 168.78000000000014,
+      "std_reward": 3.836873727398435,
+      "min_reward": 164.8000000000001,
+      "max_reward": 181.20000000000033
+    },
+    "timestamp": "2026-01-07T18:53:43.454450"
+  },
+  {
+    "experiment_name": "low_lr_seed1",
+    "config": {
+      "name": "low_lr",
+      "learning_rate": 0.0001,
+      "gamma": 0.99,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 1,
+    "training_time_seconds": 242.889708,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 168.4700000000002,
+      "std_reward": 2.7366220053197474,
+      "min_reward": 164.8000000000001,
+      "max_reward": 178.40000000000038
+    },
+    "timestamp": "2026-01-07T18:57:46.505642"
+  },
+  {
+    "experiment_name": "low_lr_seed2",
+    "config": {
+      "name": "low_lr",
+      "learning_rate": 0.0001,
+      "gamma": 0.99,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 2,
+    "training_time_seconds": 244.504009,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 167.73000000000016,
+      "std_reward": 1.9842126902124553,
+      "min_reward": 163.90000000000006,
+      "max_reward": 171.70000000000022
+    },
+    "timestamp": "2026-01-07T19:01:51.166457"
+  },
+  {
+    "experiment_name": "high_gamma_seed0",
+    "config": {
+      "name": "high_gamma",
+      "learning_rate": 0.001,
+      "gamma": 0.995,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 0,
+    "training_time_seconds": 247.83167,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 162.45000000000027,
+      "std_reward": 2.17887585695016,
+      "min_reward": 160.0000000000001,
+      "max_reward": 169.0000000000005
+    },
+    "timestamp": "2026-01-07T19:05:59.273994"
+  },
+  {
+    "experiment_name": "high_gamma_seed1",
+    "config": {
+      "name": "high_gamma",
+      "learning_rate": 0.001,
+      "gamma": 0.995,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 1,
+    "training_time_seconds": 244.216234,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 167.88000000000017,
+      "std_reward": 2.4404098016522044,
+      "min_reward": 163.90000000000006,
+      "max_reward": 172.7000000000003
+    },
+    "timestamp": "2026-01-07T19:10:03.643932"
+  },
+  {
+    "experiment_name": "high_gamma_seed2",
+    "config": {
+      "name": "high_gamma",
+      "learning_rate": 0.001,
+      "gamma": 0.995,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 2,
+    "training_time_seconds": 249.236374,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 168.61000000000018,
+      "std_reward": 2.788530078733284,
+      "min_reward": 163.8000000000001,
+      "max_reward": 173.60000000000028
+    },
+    "timestamp": "2026-01-07T19:14:13.048020"
+  },
+  {
+    "experiment_name": "low_gamma_seed0",
+    "config": {
+      "name": "low_gamma",
+      "learning_rate": 0.001,
+      "gamma": 0.95,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 0,
+    "training_time_seconds": 247.610252,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 168.64000000000019,
+      "std_reward": 2.459349507491802,
+      "min_reward": 164.9000000000001,
+      "max_reward": 173.9000000000003
+    },
+    "timestamp": "2026-01-07T19:18:20.823349"
+  },
+  {
+    "experiment_name": "low_gamma_seed1",
+    "config": {
+      "name": "low_gamma",
+      "learning_rate": 0.001,
+      "gamma": 0.95,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 1,
+    "training_time_seconds": 248.692629,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 152.54500000000053,
+      "std_reward": 36.99815502156749,
+      "min_reward": 62.0000000000024,
+      "max_reward": 172.7000000000003
+    },
+    "timestamp": "2026-01-07T19:22:29.777509"
+  },
+  {
+    "experiment_name": "low_gamma_seed2",
+    "config": {
+      "name": "low_gamma",
+      "learning_rate": 0.001,
+      "gamma": 0.95,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 2,
+    "training_time_seconds": 248.959925,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 168.39000000000016,
+      "std_reward": 2.202021798257253,
+      "min_reward": 164.90000000000006,
+      "max_reward": 173.60000000000016
+    },
+    "timestamp": "2026-01-07T19:26:38.906782"
+  },
+  {
+    "experiment_name": "large_batch_seed0",
+    "config": {
+      "name": "large_batch",
+      "learning_rate": 0.001,
+      "gamma": 0.99,
+      "batch_size": 128,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 0,
+    "training_time_seconds": 273.936496,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 166.30000000000013,
+      "std_reward": 1.8973665961010695,
+      "min_reward": 163.90000000000006,
+      "max_reward": 169.70000000000027
+    },
+    "timestamp": "2026-01-07T19:31:12.981550"
+  },
+  {
+    "experiment_name": "large_batch_seed1",
+    "config": {
+      "name": "large_batch",
+      "learning_rate": 0.001,
+      "gamma": 0.99,
+      "batch_size": 128,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 1,
+    "training_time_seconds": 268.438763,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 168.90000000000015,
+      "std_reward": 2.543226297441945,
+      "min_reward": 164.9000000000001,
+      "max_reward": 173.5000000000002
+    },
+    "timestamp": "2026-01-07T19:35:41.582959"
+  },
+  {
+    "experiment_name": "large_batch_seed2",
+    "config": {
+      "name": "large_batch",
+      "learning_rate": 0.001,
+      "gamma": 0.99,
+      "batch_size": 128,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 2,
+    "training_time_seconds": 267.701823,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 168.18000000000018,
+      "std_reward": 2.14653208687878,
+      "min_reward": 164.80000000000013,
+      "max_reward": 171.80000000000032
+    },
+    "timestamp": "2026-01-07T19:40:09.448305"
+  },
+  {
+    "experiment_name": "small_batch_seed0",
+    "config": {
+      "name": "small_batch",
+      "learning_rate": 0.001,
+      "gamma": 0.99,
+      "batch_size": 32,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 0,
+    "training_time_seconds": 236.961412,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 168.86000000000018,
+      "std_reward": 2.187784267243956,
+      "min_reward": 165.90000000000012,
+      "max_reward": 175.7000000000003
+    },
+    "timestamp": "2026-01-07T19:44:06.582844"
+  },
+  {
+    "experiment_name": "small_batch_seed1",
+    "config": {
+      "name": "small_batch",
+      "learning_rate": 0.001,
+      "gamma": 0.99,
+      "batch_size": 32,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 1,
+    "training_time_seconds": 236.382111,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 156.42500000000018,
+      "std_reward": 34.53476328281418,
+      "min_reward": 5.999999999999547,
+      "max_reward": 166.90000000000038
+    },
+    "timestamp": "2026-01-07T19:48:03.171996"
+  },
+  {
+    "experiment_name": "small_batch_seed2",
+    "config": {
+      "name": "small_batch",
+      "learning_rate": 0.001,
+      "gamma": 0.99,
+      "batch_size": 32,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.995
+    },
+    "seed": 2,
+    "training_time_seconds": 237.360865,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 168.95000000000013,
+      "std_reward": 2.3003260638440035,
+      "min_reward": 165.90000000000012,
+      "max_reward": 174.7000000000002
+    },
+    "timestamp": "2026-01-07T19:52:00.715279"
+  },
+  {
+    "experiment_name": "freq_target_update_seed0",
+    "config": {
+      "name": "freq_target_update",
+      "learning_rate": 0.001,
+      "gamma": 0.99,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 500,
+      "epsilon_decay": 0.995
+    },
+    "seed": 0,
+    "training_time_seconds": 249.67668,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 168.59000000000017,
+      "std_reward": 2.599596122477537,
+      "min_reward": 163.90000000000006,
+      "max_reward": 175.7000000000003
+    },
+    "timestamp": "2026-01-07T19:56:10.559716"
+  },
+  {
+    "experiment_name": "freq_target_update_seed1",
+    "config": {
+      "name": "freq_target_update",
+      "learning_rate": 0.001,
+      "gamma": 0.99,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 500,
+      "epsilon_decay": 0.995
+    },
+    "seed": 1,
+    "training_time_seconds": 245.508396,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 168.73000000000016,
+      "std_reward": 2.94501273341904,
+      "min_reward": 164.9000000000001,
+      "max_reward": 175.50000000000028
+    },
+    "timestamp": "2026-01-07T20:00:16.237793"
+  },
+  {
+    "experiment_name": "freq_target_update_seed2",
+    "config": {
+      "name": "freq_target_update",
+      "learning_rate": 0.001,
+      "gamma": 0.99,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 500,
+      "epsilon_decay": 0.995
+    },
+    "seed": 2,
+    "training_time_seconds": 250.655632,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 168.38500000000016,
+      "std_reward": 2.0536004966887216,
+      "min_reward": 164.80000000000013,
+      "max_reward": 171.9000000000003
+    },
+    "timestamp": "2026-01-07T20:04:27.087579"
+  },
+  {
+    "experiment_name": "slow_epsilon_decay_seed0",
+    "config": {
+      "name": "slow_epsilon_decay",
+      "learning_rate": 0.001,
+      "gamma": 0.99,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.998
+    },
+    "seed": 0,
+    "training_time_seconds": 251.30508,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 168.96000000000018,
+      "std_reward": 2.8692159207700283,
+      "min_reward": 163.90000000000006,
+      "max_reward": 176.50000000000026
+    },
+    "timestamp": "2026-01-07T20:08:38.570011"
+  },
+  {
+    "experiment_name": "slow_epsilon_decay_seed1",
+    "config": {
+      "name": "slow_epsilon_decay",
+      "learning_rate": 0.001,
+      "gamma": 0.99,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.998
+    },
+    "seed": 1,
+    "training_time_seconds": 251.259735,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 168.7750000000002,
+      "std_reward": 2.8630185119905107,
+      "min_reward": 163.70000000000007,
+      "max_reward": 175.60000000000034
+    },
+    "timestamp": "2026-01-07T20:12:50.003702"
+  },
+  {
+    "experiment_name": "slow_epsilon_decay_seed2",
+    "config": {
+      "name": "slow_epsilon_decay",
+      "learning_rate": 0.001,
+      "gamma": 0.99,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "target_update_freq": 1000,
+      "epsilon_decay": 0.998
+    },
+    "seed": 2,
+    "training_time_seconds": 250.935057,
+    "total_timesteps": 300000,
+    "evaluation": {
+      "mean_reward": 167.62000000000015,
+      "std_reward": 2.289454083400704,
+      "min_reward": 163.90000000000006,
+      "max_reward": 172.70000000000022
+    },
+    "timestamp": "2026-01-07T20:17:01.095696"
+  }
+]
