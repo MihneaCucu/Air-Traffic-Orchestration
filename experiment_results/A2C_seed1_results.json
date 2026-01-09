@@ -1,0 +1,20 @@
+{
+  "experiment_name": "A2C_seed1",
+  "config": {
+    "name": "A2C",
+    "learning_rate": 0.0003,
+    "gamma": 0.99,
+    "entropy_coef": 0.1,
+    "value_coef": 0.5
+  },
+  "seed": 1,
+  "training_time_seconds": 554.0343897342682,
+  "total_timesteps": 25000,
+  "evaluation": {
+    "mean_reward": 162.79500000000027,
+    "std_reward": 2.255764837034251,
+    "min_reward": 159.90000000000018,
+    "max_reward": 167.70000000000033
+  },
+  "timestamp": "2026-01-09T17:49:37.079784"
+}
