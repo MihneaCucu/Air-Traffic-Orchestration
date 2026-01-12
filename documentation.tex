@@ -169,6 +169,52 @@ We implement and compare multiple reinforcement learning agents with different a
 % - Random baseline
 % - etc.
 
+\subsection{Custom Advantage Actor-Critic (A2C)}
+\label{subsec:custom-a2c}
+
+To complement the value-based DQN, we implemented a synchronous Advantage Actor-Critic (A2C) agent. This architecture learns both a policy $\pi(a|s; \theta)$ (the actor) and a value function $V(s; w)$ (the critic) simultaneously, utilizing a shared feature extractor.
+
+\subsubsection{Network Architecture}
+The agent uses a shared neural network trunk that splits into two heads:
+\begin{itemize}
+    \item \textbf{Shared Trunk}: Two fully connected layers (128 neurons each) with ReLU activations.
+    \item \textbf{Actor Head}: Outputs logits for the 3 discrete actions, which are converted to probabilities via Softmax.
+    \item \textbf{Critic Head}: Outputs a single scalar representing the state value $V(s)$.
+\end{itemize}
+
+\subsubsection{Algorithm and Loss Function}
+The agent uses an N-step rollout strategy ($N=20$). Instead of updating at every step or at the end of an episode, it collects a batch of 20 steps, computes returns using bootstrapping, and performs a synchronous update.
+
+The total loss function is a weighted sum of three components:
+\begin{equation}
+\mathcal{L} = \mathcal{L}_{actor} + 0.5 \cdot \mathcal{L}_{critic} - 0.1 \cdot \mathcal{H}(\pi)
+\end{equation}
+
+Where:
+\begin{itemize}
+    \item $\mathcal{L}_{actor}$ is the Policy Gradient loss using the advantage $A_t = R_t - V(s_t)$.
+    \item $\mathcal{L}_{critic}$ is the Mean Squared Error between predicted values and computed returns.
+    \item $\mathcal{H}(\pi)$ is the entropy regularization term to encourage exploration.
+\end{itemize}
+
+\subsubsection{Implementation Details}
+\begin{lstlisting}[caption={A2C Loss Computation}, label={lst:a2c-loss}]
+# Standardized advantage calculation
+advantages = returns - values
+advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
+
+# Actor Loss (Policy Gradient)
+actor_loss = -(action_log_probs * advantages.detach()).mean()
+
+# Critic Loss (MSE)
+critic_loss = 0.5 * (advantages.pow(2)).mean()
+
+# Combined Loss with Entropy Regularization
+total_loss = actor_loss + self.value_coef * critic_loss - self.entropy_coef * entropy
+\end{lstlisting}
+
+We use the Adam optimizer with a learning rate of $3 \times 10^{-4}$ and a \texttt{ReduceLROnPlateau} scheduler to adaptively lower the learning rate when performance plateaus.
+
 \subsection{Custom Deep Q-Network (DQN) Implementation}
 \label{subsec:custom-dqn}
 
@@ -437,6 +483,7 @@ After training, we evaluated each agent to compute the mean final reward. Table 
 \hline
 Custom DQN (Optimized) & $168.57 \pm 0.14$ & Best configuration \\
 Custom DQN (Baseline) & $162.92 \pm 6.84$ & Standard hyperparameters \\
+A2C (Custom) & Comparable & Standard hyperparameters \\
 PPO (SB3) & Comparable & Policy-based approach \\
 DQN (Library) & Comparable & Validation baseline \\
 \hline
