@@ -4,6 +4,10 @@ Verifică că toate componentele funcționează
 """
 
 import os
+import sys
+# Add parent directory to path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # Fix PyTorch threading issues on macOS
 os.environ['OMP_NUM_THREADS'] = '1'
 os.environ['MKL_NUM_THREADS'] = '1'

@@ -22,6 +22,10 @@ Structură:
 """
 
 import os
+import sys
+# Add parent directory to path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # Fix PyTorch threading issues on macOS
 os.environ['OMP_NUM_THREADS'] = '1'
 os.environ['MKL_NUM_THREADS'] = '1'
@@ -125,8 +129,9 @@ def train_sac(
 
     # ===== SETUP =====
     # Directoare
-    models_dir = "models"
-    log_dir = "atc_logs"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    models_dir = script_dir  # Models saved in SAC directory
+    log_dir = os.path.join(os.path.dirname(script_dir), "atc_logs")  # Logs in parent/atc_logs
     os.makedirs(models_dir, exist_ok=True)
     os.makedirs(log_dir, exist_ok=True)
     os.makedirs(f"{models_dir}/sac_checkpoints", exist_ok=True)

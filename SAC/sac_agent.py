@@ -21,6 +21,10 @@ Avantaje SAC:
 """
 
 import os
+import sys
+# Add parent directory to path to import atc_env
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # CRITICAL: Fix PyTorch threading deadlock on macOS Python 3.13
 # Must be set BEFORE importing torch
 os.environ['OMP_NUM_THREADS'] = '1'

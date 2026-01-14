@@ -17,6 +17,10 @@ python visualize_sac.py --speed slow    # Slow motion pentru debug
 
 # CRITICAL: Set environment variables BEFORE any other imports!
 import os
+import sys
+# Add parent directory to path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 os.environ['OMP_NUM_THREADS'] = '1'
 os.environ['MKL_NUM_THREADS'] = '1'
 os.environ['OPENBLAS_NUM_THREADS'] = '1'
@@ -185,7 +189,9 @@ Examples:
 
     args = parser.parse_args()
 
-    models_dir = "models"
+    # Models are in the same SAC directory
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    models_dir = script_dir
 
     # Load agent
     print("=" * 70)

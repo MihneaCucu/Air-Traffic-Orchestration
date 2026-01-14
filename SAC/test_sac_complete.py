@@ -6,6 +6,11 @@ Script de Test Complet pentru SAC
 Verifică că toate componentele SAC funcționează corect.
 """
 
+import os
+import sys
+# Add parent directory to path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 print("=" * 70)
 print("TEST COMPLET SAC")
 print("=" * 70)

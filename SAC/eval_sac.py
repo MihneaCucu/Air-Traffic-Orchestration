@@ -14,6 +14,10 @@ python eval_sac.py --model path.pth     # Model custom
 """
 
 import os
+import sys
+# Add parent directory to path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # Fix PyTorch threading issues on macOS
 os.environ['OMP_NUM_THREADS'] = '1'
 os.environ['MKL_NUM_THREADS'] = '1'
@@ -188,9 +192,10 @@ def evaluate_sac(model_path, n_episodes=100, render=False, verbose=True):
 def compare_models(n_episodes=50):
     """Compară toate modelele SAC disponibile"""
 
-    models_dir = "models"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    models_dir = script_dir
 
-    model_paths = {
+    models_to_compare = {
         'SAC Final': f"{models_dir}/sac_atc.pth",
         'SAC Best': f"{models_dir}/sac_atc_best.pth",
     }
@@ -279,7 +284,8 @@ Examples:
 
     args = parser.parse_args()
 
-    models_dir = "models"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    models_dir = script_dir
 
     if args.compare:
         # Compare all models
