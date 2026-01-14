@@ -196,13 +196,13 @@ class ATC2DEnv(gym.Env):
         # -------- Arrival movement --------
         if self.arrival_active:
             move_speed = 1.0 - (self.wind_speed * 0.5) 
-            self.arrival02  # Reduced from 0.1
+            self.arrival_y -= move_speed
+            reward -= 0.02  # Reduced from 0.1
             
             if self.arrival_y <= 0:
                 self.arrival_active = False
                 self.arrivals_landed += 1
-                reward += 15.0  # Increased reward for successful landing_landed += 1
-                reward += 5.0
+                reward += 15.0  # Increased reward for successful landing
                 self.last_action_text = "LANDING SUCCESSFUL!"
                 self.action_timer = 30
 

@@ -1,6 +1,9 @@
+import sys
+sys.path.insert(0, '../..')
+
 import gymnasium as gym
 from stable_baselines3 import PPO, DQN
-from atc_env import ATC2DEnv
+from src.environment import ATC2DEnv
 import os
 
 models_dir = "models"

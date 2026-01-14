@@ -1,5 +1,8 @@
+import sys
+sys.path.insert(0, '../..')
+
 from stable_baselines3.common.evaluation import evaluate_policy
-from atc_env import ATC2DEnv
+from src.environment import ATC2DEnv
 from stable_baselines3 import PPO
 
 # Facem un mediu de evaluare (fără grafică e mai rapid)

@@ -1,6 +1,9 @@
+import sys
+sys.path.insert(0, '../..')
+
 import gymnasium as gym
-from atc_env import ATC2DEnv
-from custom_dqn_agent import CustomDQN
+from src.environment import ATC2DEnv
+from src.agents import CustomDQN
 import os
 
 models_dir = "models"

@@ -1,9 +1,12 @@
+import sys
+sys.path.insert(0, '../..')
+
 import gymnasium as gym
 import numpy as np
 import matplotlib.pyplot as plt
 from stable_baselines3 import PPO, DQN
-from atc_env import ATC2DEnv
-from custom_dqn_agent import CustomDQN
+from src.environment import ATC2DEnv
+from src.agents import CustomDQN
 import os
 import torch
 
