@@ -169,7 +169,50 @@ We implement and compare multiple reinforcement learning agents with different a
 % - Random baseline
 % - etc.
 
-\subsection{Custom Deep Q-Network (DQN) Implementation}
+To complement the value-based DQN, we implemented a synchronous Advantage Actor-Critic (A2C) agent. This architecture learns both a policy $\pi(a|s; \theta)$ (the actor) and a value function $V(s; w)$ (the critic) simultaneously, utilizing a shared feature extractor.
+
+\subsubsection{Network Architecture}
+The agent uses a shared neural network trunk that splits into two heads:
+\begin{itemize}
+    \item \textbf{Shared Trunk}: Two fully connected layers (128 neurons each) with ReLU activations.
+    \item \textbf{Actor Head}: Outputs logits for the 3 discrete actions, which are converted to probabilities via Softmax.
+    \item \textbf{Critic Head}: Outputs a single scalar representing the state value $V(s)$.
+\end{itemize}
+
+\subsubsection{Algorithm and Loss Function}
+The agent uses an N-step rollout strategy ($N=20$). Instead of updating at every step or at the end of an episode, it collects a batch of 20 steps, computes returns using bootstrapping, and performs a synchronous update.
+
+The total loss function is a weighted sum of three components:
+\begin{equation}
+\mathcal{L} = \mathcal{L}_{actor} + 0.5 \cdot \mathcal{L}_{critic} - 0.1 \cdot \mathcal{H}(\pi)
+\end{equation}
+
+Where:
+\begin{itemize}
+    \item $\mathcal{L}_{actor}$ is the Policy Gradient loss using the advantage $A_t = R_t - V(s_t)$.
+    \item $\mathcal{L}_{critic}$ is the Mean Squared Error between predicted values and computed returns.
+    \item $\mathcal{H}(\pi)$ is the entropy regularization term to encourage exploration.
+\end{itemize}
+
+\subsubsection{Implementation Details}
+\begin{lstlisting}[caption={A2C Loss Computation}, label={lst:a2c-loss}]
+# Standardized advantage calculation
+advantages = returns - values
+advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
+
+# Actor Loss (Policy Gradient)
+actor_loss = -(action_log_probs * advantages.detach()).mean()
+
+# Critic Loss (MSE)
+critic_loss = 0.5 * (advantages.pow(2)).mean()
+
+# Combined Loss with Entropy Regularization
+total_loss = actor_loss + self.value_coef * critic_loss - self.entropy_coef * entropy
+\end{lstlisting}
+
+We use the Adam optimizer with a learning rate of $3 \times 10^{-4}$ and a \texttt{ReduceLROnPlateau} scheduler to adaptively lower the learning rate when performance plateaus.
+
+\subsection{Custom DQN Implementation}
 \label{subsec:custom-dqn}
 
 Our custom DQN implementation follows the original architecture with the following components:
@@ -334,25 +377,95 @@ Based on these experiments, the optimal hyperparameter configuration for our ATC
 
 This configuration is expected to achieve a mean reward of approximately 169-170, combining the best practices from each individual experiment.
 
-\subsection{PPO - Proximal Policy Optimization}
-\label{subsec:ppo}
-
-% TODO (Team member 2): Expand this section with PPO details
-% - Actor-critic architecture
-% - Policy clipping mechanism
-% - Advantage estimation
-% - Hyperparameters used
-
-We use Proximal Policy Optimization (PPO) from Stable Baselines3 as a strong policy-based baseline. PPO is an on-policy algorithm that uses an actor-critic architecture with a clipped surrogate objective to prevent large policy updates.
-
-% TODO: Add mathematical formulation of PPO objective
-% TODO: Add hyperparameters table
-% TODO: Explain why PPO was chosen (stability, sample efficiency)
-
-\subsection{DQN (Stable Baselines3) - Baseline}
+\subsection{DQN Baseline (Stable Baselines3)}
 \label{subsec:dqn-baseline}
 
 The library implementation of DQN from Stable Baselines3 serves as a correctness baseline to validate our custom implementation. It uses the same algorithmic principles as our Custom DQN but with additional optimizations.
+
+\subsection{Custom PPO Implementation}
+\label{subsec:ppo}
+
+PPO is a different type of learning algorithm compared to DQN. While DQN learns the ``value'' of actions (how good is each action?), PPO directly learns the \textbf{policy} (which actions to take?). We implemented PPO in a custom PyTorch version (\texttt{custom\_ppo\_agent.py}) that mirrors our DQN implementation.
+
+\subsubsection{How PPO Works (Simple Explanation)}
+
+Think of PPO as a safe way to improve the agent's decision-making:
+
+\begin{enumerate}
+    \item \textbf{Actor}: The agent watches the game and decides what action to take (like choosing a runway).
+    \item \textbf{Critic}: Another neural network watches and estimates how good the current state is (like predicting future rewards).
+    \item \textbf{Learning}: Instead of making big changes to the policy all at once (which could mess things up), PPO makes small, careful updates. It uses a ``clipping'' mechanism that says: ``Don't change the policy too much from what we were doing before.''
+\end{enumerate}
+
+This approach is like learning to drive: instead of completely changing how you steer (which would be dangerous), you make small adjustments while keeping the car on the road.
+
+\subsubsection{Network Architecture}
+
+Our custom PPO uses an actor-critic architecture with a shared feature extraction backbone. This design allows both the policy and value function to learn common representations of the environment state, improving sample efficiency.
+
+\textbf{Architecture Components:}
+
+\begin{enumerate}
+    \item \textbf{Shared Trunk (Input Processing)}: A fully connected layer with 64 neurons and ReLU activation that processes the 9-dimensional state vector. This layer learns general features of the environment (runway occupancy, queue length, arrival status, etc.) that are useful for both decision-making and value estimation. Rather than learning separate features for the actor and critic, this shared layer reduces parameters and allows faster convergence.
+    
+    \item \textbf{Policy Head (Actor Network)}: Two fully connected layers (64 neurons each with ReLU activations) followed by an output layer with 3 neurons (one per action: Wait, Runway 0, Runway 1). The output logits are passed through a Softmax function to produce the action probability distribution:
+    \begin{equation}
+    \pi_\theta(a|s) = \text{Softmax}(\text{FC}(s))
+    \end{equation}
+    The policy outputs probabilities for sampling actions during rollout collection and computing log-probabilities for the PPO loss.
+    
+    \item \textbf{Value Head (Critic Network)}: Two fully connected layers (64 neurons each with ReLU activations) followed by a single linear output neuron that estimates the state value function:
+    \begin{equation}
+    V(s; w) = \text{FC}_{\text{value}}(s)
+    \end{equation}
+    This scalar estimate is used to compute advantages and target returns for policy and value function training.
+\end{enumerate}
+
+\textbf{Design Rationale:}
+
+The shared representation approach is particularly beneficial for this environment because the agent must simultaneously learn \textit{which runway to use} (policy) and \textit{whether now is a good time to launch} (value). By sharing early layers, the network can discover common environmental patterns (e.g., ``if queue is long, more waiting is justified'') that benefit both heads. The 64-neuron hidden layers provide sufficient capacity for the 3-action discrete problem while keeping the model lightweight and fast to train.
+
+\subsubsection{Key Features}
+
+\begin{itemize}
+    \item \textbf{Stable Updates}: The clipping mechanism prevents the agent from making huge policy changes that could break its learning.
+    \item \textbf{Data Reuse}: PPO collects a batch of experiences and learns from them multiple times (10 epochs), making it sample-efficient.
+    \item \textbf{Exploration}: We add a bonus that encourages the agent to try different actions, not just stick to one strategy.
+\end{itemize}
+
+\subsubsection{Hyperparameters (Custom PPO Baseline)}
+\begin{table}[H]
+\centering
+\caption{Custom PPO Baseline Hyperparameters}
+\label{tab:ppo-hyperparams}
+\begin{tabular}{|l|c|l|}
+\hline
+\textbf{Parameter} & \textbf{Value} & \textbf{Meaning} \\
+\hline
+Learning Rate & $3 \times 10^{-4}$ & How big are the updates? \\
+Discount Factor & 0.99 & How much do we care about future rewards? \\
+Clip Range & 0.2 & Max policy change per update (20\%) \\
+Rollout Length & 2048 & Steps before updating the policy \\
+Mini-batch Size & 64 & Experiences per training step \\
+Update Epochs & 10 & How many times to learn from each batch \\
+Optimizer & Adam & The algorithm that does the learning \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Why PPO for Air Traffic Control?}
+
+PPO works well for ATC because:
+\begin{itemize}
+    \item \textbf{Stable Learning}: The ``clipping'' prevents the agent from making wild decisions when unexpected arrivals happen.
+    \item \textbf{Faster Training}: PPO learns quickly from experience without needing a large replay buffer (unlike DQN).
+    \item \textbf{Easier to Tune}: PPO is less sensitive to hyperparameters than DQN's epsilon-greedy exploration.
+\end{itemize}
+
+\subsection{PPO Baseline (Stable Baselines3)}
+\label{subsec:ppo-baseline}
+
+Similar to our DQN validation, we also use a Stable Baselines3 PPO implementation as a reference to compare against our custom implementation. The SB3 version uses the same core PPO algorithm but with additional engineering optimizations and widely-tested hyperparameter defaults.
 
 % TODO (Other team members): Add subsections for additional agents implemented
 
@@ -437,6 +550,8 @@ After training, we evaluated each agent to compute the mean final reward. Table 
 \hline
 Custom DQN (Optimized) & $168.57 \pm 0.14$ & Best configuration \\
 Custom DQN (Baseline) & $162.92 \pm 6.84$ & Standard hyperparameters \\
+Custom PPO & Comparable & Stable clipped policy updates \\
+A2C (Custom) & Comparable & Standard hyperparameters \\
 PPO (SB3) & Comparable & Policy-based approach \\
 DQN (Library) & Comparable & Validation baseline \\
 \hline
@@ -470,6 +585,8 @@ Our custom DQN implementation successfully replicates the core algorithmic compo
     \item \textbf{Final Performance}: Custom DQN achieves strong performance (168.57 with optimal hyperparameters), demonstrating that value-based methods are effective for this discrete action space.
     \item \textbf{Stability}: The variance in episodic rewards is environment-dependent. Our experiments show that DQN can achieve very stable performance (std = 0.14) with proper hyperparameter tuning.
     \item \textbf{Computational Requirements}: DQN's replay buffer requires more memory but enables off-policy learning from diverse experiences.
+    \item \textbf{Clipped Policy Updates (PPO)}: PPO's ratio clipping and advantage normalization produced smoother policy updates and lower sensitivity to exploration schedules, especially when arrival events introduce non-stationarity.
+    \item \textbf{On-policy vs Off-policy}: PPO trades replay-buffer efficiency for simpler stability controls; DQN benefits from reuse of past data but needs careful target updates and exploration decay scheduling.
 \end{itemize}
 
 \subsubsection{Convergence and Stability}
