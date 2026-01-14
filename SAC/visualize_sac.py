@@ -19,7 +19,8 @@ python visualize_sac.py --speed slow    # Slow motion pentru debug
 import os
 import sys
 # Add parent directory to path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, project_root)
 
 os.environ['OMP_NUM_THREADS'] = '1'
 os.environ['MKL_NUM_THREADS'] = '1'
@@ -32,7 +33,7 @@ import torch
 torch.set_num_threads(1)
 
 import argparse
-from atc_env import ATC2DEnv
+from src.environment.atc_env import ATC2DEnv
 # NOTE: stable_baselines3 imported lazily in functions to avoid blocking
 from sac_agent import DiscreteSAC
 

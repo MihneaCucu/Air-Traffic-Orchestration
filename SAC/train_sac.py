@@ -24,7 +24,8 @@ Structură:
 import os
 import sys
 # Add parent directory to path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, project_root)
 
 # Fix PyTorch threading issues on macOS
 os.environ['OMP_NUM_THREADS'] = '1'
@@ -37,7 +38,7 @@ import numpy as np
 import torch
 torch.set_num_threads(1)
 
-from atc_env import ATC2DEnv
+from src.environment.atc_env import ATC2DEnv
 from sac_agent import DiscreteSAC, ReplayBuffer
 from datetime import datetime
 import argparse

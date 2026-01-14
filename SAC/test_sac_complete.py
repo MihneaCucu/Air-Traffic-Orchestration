@@ -8,8 +8,9 @@ Verifică că toate componentele SAC funcționează corect.
 
 import os
 import sys
-# Add parent directory to path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Add parent directory to path for imports
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, project_root)
 
 print("=" * 70)
 print("TEST COMPLET SAC")
@@ -22,7 +23,7 @@ try:
     print(f"  ✓ PyTorch {torch.__version__}")
     from sac_agent import DiscreteSAC, ReplayBuffer
     print("  ✓ SAC agent imported")
-    from atc_env import ATC2DEnv
+    from src.environment.atc_env import ATC2DEnv
     print("  ✓ ATC environment imported")
 except Exception as e:
     print(f"  ✗ Import failed: {e}")
