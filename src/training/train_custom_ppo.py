@@ -1,6 +1,6 @@
 import gymnasium as gym
-from atc_env import ATC2DEnv
-from custom_ppo_agent import CustomPPO
+from src.environment import ATC2DEnv
+from src.agents.custom_ppo_agent import CustomPPO
 import os
 
 models_dir = "models"
