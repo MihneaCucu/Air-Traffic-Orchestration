@@ -1,2 +1,5 @@
 rl-env
 __pycache__
+/SAC/models/sac_checkpoints/
+/SAC/models/sac_atc.pth
+/SAC/models/sac_atc_best.pth
