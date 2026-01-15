@@ -95,7 +95,7 @@ def train_sac(
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     print("=" * 70)
-    print("ANTRENAMENT SAC PENTRU ATC ENVIRONMENT")
+    print("SAC TRAINING FOR ATC ENVIRONMENT")
     print("=" * 70)
     print(f"Observation space: {env.observation_space}")
     print(f"Action space: {env.action_space}")

@@ -2,22 +2,22 @@
 SAC (Soft Actor-Critic) Package
 ================================
 
-Toate fișierele și modelele SAC sunt organizate în acest folder.
+All SAC files and models are organized in this folder.
 
 Modules:
 --------
-- sac_agent.py: Implementarea SAC agent
-- train_sac.py: Script antrenament
-- eval_sac.py: Script evaluare
-- test_sac.py: Script testare
-- visualize_sac.py: Script vizualizare
-- test_sac_complete.py: Test complet toate componente
+- sac_agent.py: SAC agent implementation
+- train_sac.py: Training script
+- eval_sac.py: Evaluation script
+- test_sac.py: Testing script
+- visualize_sac.py: Visualization script
+- test_sac_complete.py: Complete component testing
 
 Models:
 -------
-- sac_atc.pth: Model final
-- sac_atc_best.pth: Best model (recomandat)
-- sac_checkpoints/: Checkpoint-uri periodice
+- sac_atc.pth: Final model
+- sac_atc_best.pth: Best model (recommended)
+- sac_checkpoints/: Periodic checkpoints
 
 Usage:
 ------

@@ -252,7 +252,7 @@ class DiscreteSAC:
             'state_dim': self.state_dim,
             'action_dim': self.action_dim,
         }, filepath)
-        print(f" Model salvat: {filepath}")
+        print(f"Model saved: {filepath}")
 
     def load(self, filepath):
         checkpoint = torch.load(filepath, map_location=self.device, weights_only=False)
@@ -272,7 +272,7 @@ class DiscreteSAC:
             self.alpha_optimizer.load_state_dict(checkpoint['alpha_optimizer'])
             self.alpha = self.log_alpha.exp()
 
-        print(f" Model încărcat: {filepath}")
+        print(f"Model loaded: {filepath}")
     def predict(self, obs, deterministic=True):
         action = self.select_action(obs, deterministic=deterministic)
         return action, None
