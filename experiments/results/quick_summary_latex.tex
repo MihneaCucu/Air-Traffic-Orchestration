@@ -1,0 +1,15 @@
+% Paste this into your LaTeX document
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Agent} & \textbf{Mean Reward} & \textbf{Success Rate} & \textbf{Safety Score} \\ \hline
+Random & $148.0 \pm 19.0$ & 100.0\% & 8.6 \\ \hline
+DQN & $249.6 \pm 5.2$ & 100.0\% & 53.6 \\ \hline
+PPO & $224.8 \pm 9.2$ & 100.0\% & 90.4 \\ \hline
+A2C & $169.7 \pm 90.8$ & 91.1\% & 100.0 \\ \hline
+SAC & $243.6 \pm 0.2$ & 100.0\% & 61.3 \\ \hline
+\end{tabular}
+\caption{Agent Performance Comparison}
+\label{tab:agent_comparison}
+\end{table}
