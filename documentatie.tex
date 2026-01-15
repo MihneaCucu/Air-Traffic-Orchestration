@@ -638,13 +638,6 @@ for param, target_param in zip(critic.parameters(),
     \item \textbf{Mai stabil}: Nu are variance mare de policy gradient
 \end{itemize}
 
-\textbf{Comparativ cu DDPG/TD3:}
-\begin{itemize}
-    \item \textbf{Auto-tuning}: Nu necesită tuning manual al noise-ului de explorare
-    \item \textbf{Maximum entropy}: Framework teoretic mai solid
-    \item \textbf{Mai robust}: Evită mode collapse prin entropic regularization
-\end{itemize}
-
 \subsubsection{Hiperparametrii SAC}
 
 Am efectuat \textbf{sweeps extensive} de hiperparametri pentru a identifica configurația optimă:
