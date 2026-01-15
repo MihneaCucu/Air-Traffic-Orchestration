@@ -199,9 +199,9 @@ Funcția de reward creează următoarele tensiuni strategice:
 
 \begin{enumerate}
     \item \textbf{Viteză vs Siguranță}: Time penalty $(-0.01/step)$ împinge spre acțiune rapidă, dar penalitățile de conflict $(-10)$ impun prudență. Raportul $\frac{10}{0.01} = 1000$ pași înseamnă că un singur conflict echivalează cu 1000 pași de așteptare.
-    
+
     \item \textbf{Throughput vs Coordonare}: Reward-ul pentru departure $(+15)$ trebuie maximizat, dar apariția stochastică a arrival-urilor forțează așteptare strategică. Agentul învață când să "sacrifice" un pas pentru a evita conflicte viitoare.
-    
+
     \item \textbf{Reward Dense vs Sparse}: Combinația de reward-uri dense (per-step penalties, per-action rewards) cu reward sparse (terminal bonus) oferă un semnal de învățare echilibrat - feedback imediat pentru acțiuni individuale și credit assignment pentru strategia globală.
 \end{enumerate}
 
@@ -287,7 +287,7 @@ Epsilon Decay & 0.995, 0.997, 0.999 \\
 
 DQN învață "cât de bune sunt acțiunile". PPO învață direct "ce acțiuni să alegi" - adică politica.
 
-\textbf{Analogie simplă:} 
+\textbf{Analogie simplă:}
 \begin{itemize}
     \item DQN = Ai un tabel cu prețuri și alegi produsul cel mai ieftin
     \item PPO = Înveți direct ce să cumperi, fără să te uiți la prețuri
@@ -426,7 +426,7 @@ Pentru a preveni exploding gradients, aplicăm clipping la norma gradienţilor:
 Utilizăm ReduceLROnPlateau scheduler care reduce learning rate-ul cu factor 0.5 când performanța stagnează:
 \begin{lstlisting}
 scheduler = ReduceLROnPlateau(
-    optimizer, mode='max', factor=0.5, 
+    optimizer, mode='max', factor=0.5,
     patience=10, verbose=True
 )
 \end{lstlisting}
@@ -1041,7 +1041,7 @@ Acest grafic arată clar că:
     \item \textbf{Random} = rău pe toate (cum era de așteptat)
 \end{itemize}
 
-\subsection{Ce Hiperparametri}
+\subsection{Impactul hiperparametrilor}
 
 \begin{figure}[H]
     \centering
@@ -1168,7 +1168,7 @@ Note: "Optimal" estimat la ~280 reward (12 avioane × 15 + 100 bonus - ~20 time 
 
 \textbf{2. PPO era EXTREM de lent:}
 \begin{itemize}
-    \item \textit{Problema}: 1 episod = 5 minute 
+    \item \textit{Problema}: 1 episod = 5 minute
     \item \textit{Cauza}: Colecta 2048 steps × 500k total = prea mult
     \item \textit{Soluție}: Redus la 64 steps, 1 epoch, 100k total
 \end{itemize}
@@ -1219,3 +1219,6 @@ Note: "Optimal" estimat la ~280 reward (12 avioane × 15 + 100 bonus - ~20 time 
 \end{itemize}
 
 \end{document}
+
+
+
