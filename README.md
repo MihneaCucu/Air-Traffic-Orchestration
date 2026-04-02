@@ -7,7 +7,6 @@
 * **Antonio Soare**
 * **Cezar Tulceanu**
 * **Cristina Cârstea**
-* *University of Bucharest*
 
 ---
 
